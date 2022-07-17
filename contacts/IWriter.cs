@@ -1,4 +1,4 @@
-public interface IWriter
+public interface IWriter<T>
 {
-    void WriteAllLines(List<string> lines);
+        void Write(T data);    
 }

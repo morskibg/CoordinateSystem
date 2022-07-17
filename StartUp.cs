@@ -7,27 +7,31 @@ namespace CoordinateSystem
     {
         static void Main(string[] args)
         {
-
+            var errorWriter = new ErrorWriter();
             try
             {
                 string[] lines = ReadInputHandler();
+                if(lines.Count() == 0)
+                {
+                    throw new InvalidOperationException();
+                }
                 Dictionary<long,Point2D> points = Point2DParserHandler(lines);
                 ResultHandler(points);
 
-            }
-            catch (FileNotFoundException ex)
+            }            
+            catch (Exception ex) when (ex is FileNotFoundException || ex is InvalidOperationException)
             {
-                Console.WriteLine($"Error info:{ex.Message}");
+                errorWriter.Write($"Error info: {ex.Message}");
                 Environment.ExitCode = 1; 
             }            
             
         }
-        public static string[] ReadInputHandler()
+        public static string[] ReadInputHandler(string filename = Constants.INPUT_FILE_NAME)
         {
-            var fileReader = new FileReader();
+            var fileReader = new FileReader(filename);
             try
             {
-                string[] lines = fileReader.ReadAllLines();
+                string[] lines = fileReader.Read();
                 return lines;
             }
             catch (FileNotFoundException )
@@ -37,6 +41,7 @@ namespace CoordinateSystem
         }
         public static Dictionary<long,Point2D> Point2DParserHandler(string[] lines)
         {
+            var errorWriter = new ErrorWriter();
             var point2DParser = new Point2DParser();
             var points = new Dictionary<long,Point2D>();
 
@@ -44,6 +49,9 @@ namespace CoordinateSystem
             {
                 if(!point2DParser.IsValid(line))
                 {
+                    errorWriter.Write(line == string.Empty ? 
+                        $"Error info: empty input line" : 
+                        $"Error info: Invalid point format for {line}");
                     continue;
                 }
                 try
@@ -59,14 +67,15 @@ namespace CoordinateSystem
                 }
                 catch (Exception ex) when (ex is ArgumentException || ex is OverflowException)                    
                 {
-                    Console.WriteLine($"Error for {line} with info:{ex.Message}");                            
+                    errorWriter.Write($"Error info: {line} with info:{ex.Message}");                            
                 }
             }
             return points;
         }
-        public static void ResultHandler(Dictionary<long,Point2D> points)
+        public static void ResultHandler(Dictionary<long,Point2D> points, 
+                                                string filename = Constants.RESULT_FILE_NAME)
         {
-            FileWriter fileWriter = new FileWriter();
+            var fileWriter = new FileWriter(filename);
             var maxDistancePoint = points
                     .OrderByDescending(x => x.Value.DistanceFromOrigin)
                     .First(); 
@@ -78,7 +87,7 @@ namespace CoordinateSystem
             var linesToWrite = maxDistancePoints.Select(x => x.Value.ToString()).ToList();
 
             linesToWrite.ForEach(Console.WriteLine);
-            fileWriter.WriteAllLines(linesToWrite);
+            fileWriter.Write(linesToWrite);
         }
     }
 }

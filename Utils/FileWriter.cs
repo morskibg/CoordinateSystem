@@ -3,7 +3,7 @@ using System.IO;
 
 namespace CoordinateSystem
 {
-    public class FileWriter:IWriter
+    public class FileWriter:IWriter<List<string>>
     {
         public string FileName { get; set; }
         public string FullPath { get; set; }
@@ -13,10 +13,9 @@ namespace CoordinateSystem
         {
             this.FileName = fileName;             
             this.FullPath = Path.Combine(Directory.GetCurrentDirectory(), this.FileName);             
-        }
-        public FileWriter():this(Constants.RESULT_FILE_NAME){}
+        }        
     
-        public void WriteAllLines(List<string> lines)
+        public void Write(List<string> lines)
         {   
             File.WriteAllLines(this.FullPath, lines);                       
         }

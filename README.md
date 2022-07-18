@@ -1,15 +1,20 @@
 ## Technical task - Coordinate System
 
-### Find Peaks
-
-#### A peak element is an element that is greater than its neighbors.
-#### Given an input array nums, where nums[i] ≠ nums[i+1], return all peaks with their index and value
-####  
-#### Examples:
-#### Input: nums = [1, 2, 3, 1]
-#### Output: 2, 3 
-####  
-#### Input: nums = [1, 2, 1, 3, 5, 8, 4]
-#### Output: 1, 2; 5, 8
-
+### Write a console application based on the following requirements:
+####  1.	The program reads it's input from a text file on the file system
+####  2.	Each line of the input file contains definitions for a point in a 2d coordinate system
+####  a.	Format of a single point is: PointNo(coord_axis_x, coord_axis_y)
+####  b.	Point1(2, 3)
+####  c.	Point2(-3,-9)
+####  d.	Point3(-5, 2)
+####  e.	...
+####  3.	Output
+####  a.	which point(s) are the furthest from the center (0, 0) in a straight line
+####  b.	in which quadrant those points are
+####  c.	the result can be printed in the console or in output file
+####  Considerations:
+####  •	The application should run on another machine without extra configuration/setup
+####  •	Consider the most suitable types for your variables
+####  •	Consider suitable input validations
+####  •	Consider corner cases
 
